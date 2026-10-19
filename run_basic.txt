@@ -1,0 +1,22 @@
+set sourcefiles {cache_controller.sv memory.sv tb_basic.sv}
+
+set topmodule tb_basic
+
+quit -sim
+
+if [file exists "work"] {vdel -all}
+
+vlib work
+
+if [catch "eval vlog -sv $sourcefiles"] {
+    puts "correct the compilation errors"
+    return
+}
+
+vsim -voptargs=+acc $topmodule
+
+add wave -r *
+
+run -all
+
+wave zoom full
